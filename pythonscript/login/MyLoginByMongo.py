@@ -1,6 +1,6 @@
 import hashlib
 import hmac
-import PyMySQLHelper
+import PyMongoHelper
 
 
 
@@ -8,23 +8,21 @@ import PyMySQLHelper
 
 class Login(object):
 
-
     def main(self):
         account = input("please input your account")
         password = input("please input your password")
         if not self.check_accout(account):
             print("账号不存在")
         else:
-            if self.check_password(account, password):
+            if self.check_password(password):
                 print('登录成功')
             else:
                 print('登录失败请检查密码')
 
 
-    def check_password(self,account:str,password:str)-> bool:
-        sql = f"select password from user where account = '{account}'"
-        sqlpassword = PyMySQLHelper.PyMySQLHelper().query_one(sql)[0]
-        if password == sqlpassword:
+    def check_password(self,password:str)-> bool:
+
+        if password == str(self.cursor['password']):
             return True
         else:
             return False
@@ -33,9 +31,12 @@ class Login(object):
     def check_accout(self, account: str) -> bool:
 
         # 需要加上引号
-        sql = f"select * from user where account = '{account}'"
-        if PyMySQLHelper.PyMySQLHelper().query_one(sql):
-            # print(PyMySQLHelper.PyMySQLHelper().query_one(sql))
+        # sql = f"select * from user where account = '{account}'"
+        query_json = {'account': account}
+        # 保存查询结果，减少查询次数
+        cursor = PyMongoHelper.PyMongoHelper().find_one(query_json)
+        if cursor:
+            self.cursor = cursor
             return True
         else:
             return False
@@ -44,5 +45,6 @@ class Login(object):
 
 if __name__ == '__main__':
     test = Login()
-    # test.check_password('root', '123456')
+    # print(test.check_accout('root'))
+    # print(test.check_password('123456'))
     test.main()

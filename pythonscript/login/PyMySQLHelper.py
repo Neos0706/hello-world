@@ -17,7 +17,17 @@ class PyMySQLHelper(object):
         except pymysql.Error as e:
             print(f'MySql Error: {e}')
 
-    # 执行sql命令
+    def cud(self, sql):
+        try:
+            print(sql)
+            self.cursor.execute(sql)
+
+        except pymysql.Error as e:
+           print(f'MySql Error: {e}') 
+        else:
+            self.commit()
+        
+    # 执行retrievesql命令
     def query(self, sql):
         try:
             rows = self.cursor.execute(sql)

@@ -7,7 +7,7 @@ import time
 """
 
 
-def files_parameters(script, files):
+def files_parameters(script, files)->None:
     for i in files:
         cmd(script, i)
 
