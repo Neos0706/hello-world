@@ -21,8 +21,8 @@ class Login(object):
 
 
     def check_password(self,password:str)-> bool:
-
-        if password == str(self.cursor['password']):
+        hash_password = hashlib.sha256(password.encode()).hexdigest()
+        if hash_password == str(self.cursor['password']):
             return True
         else:
             return False

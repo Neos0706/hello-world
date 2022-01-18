@@ -62,4 +62,6 @@ class PyMySQLHelper(object):
 
 if __name__ == '__main__':
     test = PyMySQLHelper()
-    test.retrieve('1')
+    account = 'root'
+    sql = f"select * from user where account = '{account}'"
+    print(test.query_one(sql)[2])
